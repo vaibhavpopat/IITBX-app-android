@@ -20,7 +20,6 @@ import org.edx.mobile.model.course.CourseComponent;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.services.LastAccessManager;
 import org.edx.mobile.view.adapters.CourseUnitPagerAdapter;
-import org.edx.mobile.view.common.PageViewStateCallback;
 import org.edx.mobile.view.custom.DisableableViewPager;
 
 import java.util.ArrayList;
@@ -31,10 +30,6 @@ import javax.inject.Inject;
 
 import roboguice.inject.InjectView;
 
-
-/**
- *
- */
 public class CourseUnitNavigationActivity extends CourseBaseActivity implements CourseUnitVideoFragment.HasComponent {
     protected Logger logger = new Logger(getClass().getSimpleName());
 
@@ -80,17 +75,7 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                    int curIndex = pager.getCurrentItem();
-                    PageViewStateCallback curView = (PageViewStateCallback) pagerAdapter.instantiateItem(pager, curIndex);
-                    if (curView != null)
-                        curView.onPageDisappear();
-                }
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
-                    int curIndex = pager.getCurrentItem();
-                    PageViewStateCallback curView = (PageViewStateCallback) pagerAdapter.instantiateItem(pager, curIndex);
-                    if (curView != null)
-                        curView.onPageShow();
                     tryToUpdateForEndOfSequential();
                 }
             }
@@ -98,18 +83,8 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
 
         findViewById(R.id.course_unit_nav_bar).setVisibility(View.VISIBLE);
 
-        mPreviousBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigatePreviousComponent();
-            }
-        });
-        mNextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateNextComponent();
-            }
-        });
+        mPreviousBtn.setOnClickListener(view -> navigatePreviousComponent());
+        mNextBtn.setOnClickListener(view -> navigateNextComponent());
     }
 
     @Override
@@ -122,9 +97,6 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
     public void navigatePreviousComponent() {
         int index = pager.getCurrentItem();
         if (index > 0) {
-            PageViewStateCallback curView = (PageViewStateCallback) pagerAdapter.instantiateItem(pager, index);
-            if (curView != null)
-                curView.onPageDisappear();
             pager.setCurrentItem(index - 1);
         }
     }
@@ -133,9 +105,6 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
     public void navigateNextComponent() {
         int index = pager.getCurrentItem();
         if (index < pagerAdapter.getCount() - 1) {
-            PageViewStateCallback curView = (PageViewStateCallback) pagerAdapter.instantiateItem(pager, index);
-            if (curView != null)
-                curView.onPageDisappear();
             pager.setCurrentItem(index + 1);
         }
     }
