@@ -36,7 +36,6 @@ import roboguice.inject.InjectView;
  *
  */
 public class CourseUnitNavigationActivity extends CourseBaseActivity implements CourseUnitVideoFragment.HasComponent {
-    private static final byte UNITS_TO_PRELOAD = 3;
     protected Logger logger = new Logger(getClass().getSimpleName());
 
     private DisableableViewPager pager;
@@ -70,7 +69,6 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
         pagerAdapter = new CourseUnitPagerAdapter(getSupportFragmentManager(),
                 environment.getConfig(), unitList, courseData, this);
         pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(UNITS_TO_PRELOAD);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
