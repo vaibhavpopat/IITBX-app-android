@@ -44,17 +44,11 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
         authWebView.loadUrl(true, unit.getBlockUrl());
     }
 
-    /*@Override
+    @Override
     public void onResume() {
         super.onResume();
         authWebView.onResume();
-        if (hasComponentCallback != null) {
-            final CourseComponent component = hasComponentCallback.getComponent();
-            if (component != null && component.equals(unit)) {
-                authWebView.loadUrl(false, unit.getBlockUrl());
-            }
-        }
-    }*/
+    }
 
     @Override
     public void onPause() {
