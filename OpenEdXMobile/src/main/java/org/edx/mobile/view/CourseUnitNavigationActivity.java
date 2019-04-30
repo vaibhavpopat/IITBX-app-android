@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import roboguice.inject.InjectView;
 
 public class CourseUnitNavigationActivity extends CourseBaseActivity implements CourseUnitVideoFragment.HasComponent {
-    private static final byte UNITS_TO_RELOAD = 3;
+    private static final byte UNITS_TO_RELOAD = 2;
     protected Logger logger = new Logger(getClass().getSimpleName());
 
     private DisableableViewPager pager;
