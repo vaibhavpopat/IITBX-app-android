@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.services.LastAccessManager;
 import org.edx.mobile.view.adapters.CourseUnitPagerAdapter;
 import org.edx.mobile.view.custom.DisableableViewPager;
+import org.edx.mobile.view.custom.PreloadingManager;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -30,8 +32,8 @@ import javax.inject.Inject;
 
 import roboguice.inject.InjectView;
 
-public class CourseUnitNavigationActivity extends CourseBaseActivity implements CourseUnitVideoFragment.HasComponent {
-    private static final byte UNITS_TO_RELOAD = 2;
+public class CourseUnitNavigationActivity extends CourseBaseActivity implements
+        CourseUnitVideoFragment.HasComponent, PreloadingManager {
     protected Logger logger = new Logger(getClass().getSimpleName());
 
     private DisableableViewPager pager;
@@ -49,6 +51,8 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
     @InjectView(R.id.prev_unit_title)
     private TextView mPreviousUnitLbl;
 
+    private PreloadingManager.State viewPagerState = PreloadingManager.State.DEFAULT;
+
     @Inject
     LastAccessManager lastAccessManager;
 
@@ -64,7 +68,6 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
         pager = findViewById(R.id.pager);
         pagerAdapter = new CourseUnitPagerAdapter(getSupportFragmentManager(),
                 environment.getConfig(), unitList, courseData, this);
-        pager.setOffscreenPageLimit(UNITS_TO_RELOAD);
         pager.setAdapter(pagerAdapter);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -240,13 +243,13 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
         return selectedUnit;
     }
 
-    protected void hideLastAccessedView(View v) {
-    }
-
-    protected void showLastAccessedView(View v, String title, View.OnClickListener listener) {
+    @Override
+    public void setLoadingState(@NonNull State newState) {
+        viewPagerState = newState;
     }
 
     @Override
-    protected void onOffline() {
+    public boolean isMainUnitLoaded() {
+        return viewPagerState == State.MAIN_UNIT_LOADED;
     }
 }
