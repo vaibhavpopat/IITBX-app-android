@@ -3,6 +3,8 @@ package org.edx.mobile.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.HttpMetric;
 import com.google.inject.Inject;
 
 import org.edx.mobile.core.IEdxEnvironment;
@@ -44,6 +46,8 @@ public class CoursesAsyncLoader extends AsyncTaskLoader<AsyncTaskResult<List<Enr
 
     @Override
     public AsyncTaskResult<List<EnrolledCoursesResponse>> loadInBackground() {
+        HttpMetric metric = FirebasePerformance.getInstance().newHttpMetric("https://www.myedxsite.com/api/mobile/v1/users/username/course_enrollments", FirebasePerformance.HttpMethod.GET);
+        metric.start();
         List<EnrolledCoursesResponse> enrolledCoursesResponse = null;
 
         AsyncTaskResult<List<EnrolledCoursesResponse>> result = new AsyncTaskResult<>();
@@ -59,6 +63,11 @@ public class CoursesAsyncLoader extends AsyncTaskLoader<AsyncTaskResult<List<Enr
 
         result.setResult(enrolledCoursesResponse);
 
+        metric.setHttpResponseCode(200);
+        metric.setRequestPayloadSize(123456);
+        metric.setResponseContentType("application/json");
+        metric.setResponsePayloadSize(78910);
+        metric.stop();
         return result;
     }
 

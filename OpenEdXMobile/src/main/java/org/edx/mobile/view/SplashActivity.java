@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.AddTrace;
+import com.google.firebase.perf.metrics.Trace;
+
 import org.edx.mobile.base.MainApplication;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.deeplink.DeepLinkManager;
@@ -20,6 +24,7 @@ public class SplashActivity extends Activity {
     private Config config = new Config(MainApplication.instance());
 
     @Override
+    @AddTrace(name = "Splash_onCreateTrace")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!Config.FabricBranchConfig.isBranchEnabled(config.getFabricConfig())) {
@@ -48,6 +53,14 @@ public class SplashActivity extends Activity {
         } else {
             environment.getRouter().showLaunchScreen(SplashActivity.this);
         }
+
+        // Add custom perf metric
+        logger.debug("Firebase -- KHALID");
+        Trace trace = FirebasePerformance.getInstance().newTrace("Custom_SplashActivity_Trace");
+        trace.start();
+        trace.incrementMetric("incrementMetric", 101);
+        trace.putMetric("putMetric", 123);
+        trace.stop();
     }
 
     @Override
