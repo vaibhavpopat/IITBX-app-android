@@ -153,8 +153,10 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
             }
             addFindCoursesFooter();
             adapter.notifyDataSetChanged();
+            logger.debug("HEY THERE THE NO COURSE CRASH ERROR IS HERE");
 
-            if (adapter.isEmpty() && !environment.getConfig().getDiscoveryConfig().getCourseDiscoveryConfig().isDiscoveryEnabled()) {
+//          if (adapter.isEmpty() && !environment.getConfig().getDiscoveryConfig().getCourseDiscoveryConfig().isDiscoveryEnabled()) {
+            if (adapter.isEmpty()) {
                 errorNotification.showError(R.string.no_courses_to_display,
                         FontAwesomeIcons.fa_exclamation_circle, 0, null);
                 binding.myCourseList.setVisibility(View.GONE);
